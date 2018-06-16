@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  res.status(200).json({
-    test: "hey was geht"
-  });
-});
+const CustomerController = require("../controllers/customers");
+
+router.get("/", CustomerController.getAllCustomers);
+router.post("/", CustomerController.createCustomer);
 
 module.exports = router;
