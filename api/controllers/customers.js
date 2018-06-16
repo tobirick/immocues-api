@@ -60,3 +60,40 @@ exports.getCustomerByID = (req, res, next) => {
       res.status(500).json({ error });
     });
 };
+
+exports.updateCustomerByID = (req, res, next) => {
+  const id = req.params.customerId;
+  Customer.update({ _id: id }, { $set: req.body })
+    .exec()
+    .then(() => {
+      return Customer.findById(id)
+        .select("-__v")
+        .exec();
+    })
+    .then(customer => {
+      const response = {
+        customer
+      };
+      res.status(200).json(response);
+    })
+    .catch(error => {
+      res.status(500).json({
+        error
+      });
+    });
+};
+
+exports.deleteCustomerByID = (req, res, next) => {
+  const id = req.params.customerId;
+  Customer.remove({ _id: id })
+    .exec()
+    .then(() => {
+      const response = {
+        message: "Customer successfully deleted!"
+      };
+      res.status(200).json(response);
+    })
+    .catch(error => {
+      res.status(500).json({ error });
+    });
+};
