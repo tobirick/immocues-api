@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const customerRoutes = require("./api/routes/customers");
+const userRoutes = require("./api/routes/users");
 
 // ENV Variables
 const mode = process.env.NODE_ENV || "development";
@@ -38,6 +39,7 @@ app.use((req, res, next) => {
 // Routes
 const currentVersion = "/api/v1";
 app.use(`${currentVersion}/customers`, customerRoutes);
+app.use(`${currentVersion}/users`, userRoutes);
 
 // Error Handling
 app.use((req, res, next) => {
