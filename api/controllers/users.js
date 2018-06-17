@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 exports.signUpUser = (req, res, next) => {
-  User.find({ email: req.body.emai })
+  User.find({ email: req.body.email })
     .exec()
     .then(user => {
       if (user.length >= 1) {
@@ -46,7 +46,7 @@ exports.loginUser = (req, res, next) => {
   User.find({ email: req.body.credentials.email })
     .exec()
     .then(user => {
-      if (user.lemgth < 1) {
+      if (user.length < 1) {
         return res.status(401).json({
           message: "Auth failed"
         });
