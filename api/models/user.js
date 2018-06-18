@@ -21,6 +21,12 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    employeeNumber: {
+      type: String
+    },
+    title: {
+      type: String
+    },
     gender: {
       type: String,
       enum: ["male", "female"]
@@ -28,15 +34,12 @@ const userSchema = mongoose.Schema(
     birthDate: {
       type: Date
     },
-    startWorking: {
+    startedWorking: {
       type: Date
     },
     stoppedWorking: {
       type: Date,
       default: null
-    },
-    title: {
-      type: String
     },
     phoneNumber: {
       type: String

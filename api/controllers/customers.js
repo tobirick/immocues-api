@@ -63,7 +63,7 @@ exports.getCustomerByID = (req, res, next) => {
 
 exports.updateCustomerByID = (req, res, next) => {
   const id = req.params.customerId;
-  Customer.update({ _id: id }, { $set: req.body })
+  Customer.update({ _id: id }, { $set: req.body.customer })
     .exec()
     .then(() => {
       return Customer.findById(id)

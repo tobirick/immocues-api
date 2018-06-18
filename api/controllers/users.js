@@ -3,6 +3,19 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
+exports.getAllUsers = (req, res, next) => {
+  User.find()
+    .select("-__v -password")
+    .exec()
+    .then(users => {
+      const response = { users };
+      res.status(200).json(response);
+    })
+    .catch(error => {
+      res.status(500).json({ error });
+    });
+};
+
 exports.signUpUser = (req, res, next) => {
   User.find({ email: req.body.user.email })
     .exec()
@@ -83,6 +96,41 @@ exports.loginUser = (req, res, next) => {
           }
         );
       }
+    })
+    .catch(error => {
+      res.status(500).json({ error });
+    });
+};
+
+exports.updateUserByID = (req, res, next) => {
+  const id = req.params.userId;
+  User.update({ _id: id }, { $set: req.body.user })
+    .exec()
+    .then(() => {
+      return User.findById(id)
+        .select("-__v -password")
+        .exec();
+    })
+    .then(user => {
+      const response = {
+        user
+      };
+      res.status(200).json(response);
+    })
+    .catch(error => {
+      res.status(500).json({
+        error
+      });
+    });
+};
+
+exports.deleteUserByID = (req, res, next) => {
+  const id = req.params.userId;
+  User.remove({ _id: id })
+    .exec()
+    .then(() => {
+      const response = { message: "User successfully deleted!" };
+      res.status(200).json(response);
     })
     .catch(error => {
       res.status(500).json({ error });
