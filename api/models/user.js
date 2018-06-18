@@ -21,6 +21,19 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    gender: {
+      enum: ["male", "female"]
+    },
+    birthDate: {
+      type: Date
+    },
+    startWorking: {
+      type: Date
+    },
+    stoppedWorking: {
+      type: Date,
+      default: null
+    },
     title: {
       type: String
     },
