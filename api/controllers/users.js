@@ -60,23 +60,20 @@ exports.loginUser = (req, res, next) => {
               });
             }
             if (result) {
-              const token = jwt.sign(
-                {
-                  email: user[0].email,
-                  userId: user[0]._id,
-                  isAdmin: user[0].isAdmin
-                },
-                process.env.JWT_KEY,
-                { expiresIn: "1h" }
-              );
+              const loggedInUser = {
+                email: user[0].email,
+                userId: user[0]._id,
+                isAdmin: user[0].isAdmin,
+                firstName: user[0].firstName,
+                lastName: user[0].lastName
+              };
+              const token = jwt.sign(loggedInUser, process.env.JWT_KEY, {
+                expiresIn: "1h"
+              });
               const response = {
                 message: "Auth successful",
                 token,
-                user: {
-                  _id: user[0]._id,
-                  email: user[0].email,
-                  isAdmin: user[0].isAdmin
-                }
+                user: loggedInUser
               };
               return res.status(200).json(response);
             }
