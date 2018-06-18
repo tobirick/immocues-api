@@ -19,7 +19,8 @@ exports.signUpUser = (req, res, next) => {
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
               ...req.body.user,
-              password: hash
+              password: hash,
+              createdBy: req.currentUser.userId
             });
             user
               .save()
