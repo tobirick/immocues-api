@@ -22,6 +22,7 @@ const userSchema = mongoose.Schema(
       required: true
     },
     gender: {
+      type: String,
       enum: ["male", "female"]
     },
     birthDate: {
@@ -56,6 +57,11 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true
+    },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false
     }
   },
   { timestamps: true }

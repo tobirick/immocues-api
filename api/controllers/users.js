@@ -18,16 +18,16 @@ exports.signUpUser = (req, res, next) => {
           } else {
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
-              email: req.body.email,
+              ...req.body,
               password: hash
             });
             user
               .save()
               .then(user => {
+                const { password, ...otherProps } = user;
                 const response = {
                   user: {
-                    _id: user._id,
-                    email: user.email
+                    ...otherProps
                   }
                 };
 
