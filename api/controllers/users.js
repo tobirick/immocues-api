@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 exports.signUpUser = (req, res, next) => {
-  User.find({ email: req.body.email })
+  User.find({ email: req.body.user.email })
     .exec()
     .then(user => {
       if (user.length >= 1) {
@@ -12,29 +12,27 @@ exports.signUpUser = (req, res, next) => {
           message: "E-Mail already exists"
         });
       } else {
-        bcrypt.hash(req.body.password, 10, (error, hash) => {
+        bcrypt.hash(req.body.user.password, 10, (error, hash) => {
           if (error) {
             return res.status(500).json({ error });
           } else {
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
-              ...req.body,
+              ...req.body.user,
               password: hash
             });
             user
               .save()
-              .then(user => {
-                const { password, ...otherProps } = user;
+              .then(userData => {
+                const { password, __v, ...user } = userData._doc;
                 const response = {
-                  user: {
-                    ...otherProps
-                  }
+                  user
                 };
 
                 res.status(201).json(response);
               })
               .catch(error => {
-                res.status(500).json(error);
+                res.status(500).json({ error });
               });
           }
         });
@@ -71,7 +69,8 @@ exports.loginUser = (req, res, next) => {
                 token,
                 user: {
                   _id: user[0]._id,
-                  email: user[0].email
+                  email: user[0].email,
+                  isAdmin: user[0].isAdmin
                 }
               };
               return res.status(200).json(response);
@@ -84,7 +83,7 @@ exports.loginUser = (req, res, next) => {
       }
     })
     .catch(error => {
-      res.status(500).json(error);
+      res.status(500).json({ error });
     });
 };
 

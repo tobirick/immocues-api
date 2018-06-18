@@ -19,10 +19,10 @@ exports.getAllCustomers = (req, res, next) => {
 };
 
 exports.createCustomer = (req, res, next) => {
-  console.log(req.body);
   const customer = new Customer({
     ...req.body.customer,
-    _id: new mongoose.Types.ObjectId()
+    _id: new mongoose.Types.ObjectId(),
+    createdBy: req.currentUser.userId
   });
 
   customer
